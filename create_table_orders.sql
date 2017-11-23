@@ -4,7 +4,7 @@
 
 CREATE TABLE public.orders
 (
-    id integer NOT NULL DEFAULT nextval('orders_id_seq'::regclass),
+    id SERIAL,
     title character varying(200) COLLATE pg_catalog."default" NOT NULL,
     type character varying(100) COLLATE pg_catalog."default" NOT NULL,
     master character varying(100) COLLATE pg_catalog."default" NOT NULL,

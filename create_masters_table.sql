@@ -4,7 +4,7 @@
 
 CREATE TABLE public.masters
 (
-    id integer NOT NULL DEFAULT nextval('employees_employee_id_seq'::regclass),
+    id SERIAL,
     full_name character varying COLLATE pg_catalog."default" NOT NULL,
     departament character varying(100) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT employees_pkey PRIMARY KEY (id),
