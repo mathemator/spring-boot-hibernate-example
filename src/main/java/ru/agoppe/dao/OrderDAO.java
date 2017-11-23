@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.agoppe.entity.Master;
 import ru.agoppe.entity.Order;
 
 @Transactional
@@ -59,9 +60,15 @@ public class OrderDAO implements IOrderDAO {
 
     @Override
     public void addOrder(Order order) {
-        if(order.getType() == null || order.getType().isEmpty()) {
-
-
+        if(order.getMaster() == null || order.getMaster().isEmpty()) {
+            String hql = "FROM Master ORDER BY RANDOM()";
+            Master master = (Master) entityManager.createQuery(hql).setMaxResults(1).getSingleResult();
+            order.setMaster(master.getFullName());
+            order.setType(master.getDepartament());
+        } else if (order.getType() == null || order.getType().isEmpty()){
+            String hql = "FROM Master where full_name = ?";
+            Master master = (Master) entityManager.createQuery(hql).setParameter(1, order.getMaster()).getSingleResult();
+            order.setType(master.getDepartament());
         }
 
         entityManager.persist(order);
@@ -70,7 +77,6 @@ public class OrderDAO implements IOrderDAO {
     @Override
     public void updateOrder(Order order) {
         Order ordr = this.getOrderByTitle(order.getTitle());
-        ordr.setTitle(order.getTitle());
         if(order.getMaster() != null) {
             ordr.setMaster(order.getMaster());
         }

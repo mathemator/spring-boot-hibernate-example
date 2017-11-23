@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import ru.agoppe.entity.Master;
 import ru.agoppe.entity.Order;
 
 import java.net.URI;
@@ -22,9 +23,39 @@ public class RestClientUtil {
         HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
         ResponseEntity<Order> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Order.class, 1);
         Order order = responseEntity.getBody();
-        System.out.println("Id:" + order.getId() + ", Title:" + order.getTitle()
+        System.out.println("Id: " + order.getId() + ", Title: " + order.getTitle()
                 + ", Master: " + order.getMaster() + ", Type: " + order.getType() + ", StartDate: " + order.getStartDate()
                 + ", EndDate: " + order.getEndDate());
+    }
+
+    public void getMasterByNameDemo() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/roga/master/John Lennon";
+        HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
+        ResponseEntity<Master> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Master.class, 1);
+        Master master = responseEntity.getBody();
+        System.out.println("Id: " + master.getId() + ", Name: " + master.getFullName()
+                + ", Departament: " + master.getDepartament());
+    }
+
+    public void addMasterDemo(){
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/roga/master";
+        Master master = new Master();
+        master.setFullName("New Master");
+        master.setDepartament("office");
+        //        order.setMaster("Paul McCartney");
+        //        order.setType("storage");
+
+
+        HttpEntity<Master> requestEntity = new HttpEntity<Master>(master, headers);
+        URI uri = restTemplate.postForLocation(url, requestEntity);
+        System.out.println(uri.getPath());
     }
 
     public void getOrderLeftTimeDemo() {
@@ -104,9 +135,9 @@ public class RestClientUtil {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8080/roga/order";
         Order order = new Order();
-        order.setTitle("title_new");
-        order.setMaster("Paul McCartney");
-        order.setType("storage");
+        order.setTitle("title_new2");
+//        order.setMaster("Paul McCartney");
+//        order.setType("storage");
         Date now = new Date();
         order.setStartDate(now);
         now.setTime(now.getTime() + 7200L);
@@ -139,6 +170,16 @@ public class RestClientUtil {
         System.out.println(responseEntity.getStatusCode());
     }
 
+    public void deleteMasterDemo() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/roga/master/New Master";
+        HttpEntity<Master> requestEntity = new HttpEntity<Master>(headers);
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Void.class, 4);
+        System.out.println(responseEntity.getStatusCode());
+    }
+
     public void updateOrderDemo() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -153,18 +194,34 @@ public class RestClientUtil {
         restTemplate.put(url, requestEntity);
     }
 
+    public void updateMasterDemo() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/roga/master";
+        Master master = new Master();
+        master.setFullName("New Master");
+        master.setDepartament("storage");
+
+        HttpEntity<Master> requestEntity = new HttpEntity<Master>(master, headers);
+        restTemplate.put(url, requestEntity);
+    }
+
     public static void main(String args[]) {
         RestClientUtil util = new RestClientUtil();
+//        util.getMasterByNameDemo();
+//        util.addMasterDemo();
         //util.getArticleByIdDemo();
-        //        util.getAllOrdersDemo();
-        //        util.getUnfinishedOrdersDemo();
+//        util.getAllOrdersDemo();
+//        util.getUnfinishedOrdersDemo();
 //        util.getOrderLeftTimeDemo();
 //        util.deleteOrderDemo();
+//        util.deleteMasterDemo();
 //                util.addOrderDemo();
-        util.updateOrderDemo();
+//        util.updateOrderDemo();
+//        util.updateMasterDemo();
         //        util.getOrdersByDepartamentDemo();
         //        util.getOrdersByMasterDemo();
-        //util.updateArticleDemo();
-        //util.deleteArticleDemo();
+
     }
 }

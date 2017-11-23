@@ -74,4 +74,5 @@ public class Order implements Serializable {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+
 }

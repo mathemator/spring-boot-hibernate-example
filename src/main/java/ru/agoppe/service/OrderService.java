@@ -10,53 +10,55 @@ import ru.agoppe.entity.Order;
 @Service
 public class OrderService implements IOrderService {
 	@Autowired
-	private IOrderDAO articleDAO;
+	private IOrderDAO orderDAO;
 	@Override
 	public Order getOrderByTitle(String title) {
-		Order obj = articleDAO.getOrderByTitle(title);
+		Order obj = orderDAO.getOrderByTitle(title);
 		return obj;
 	}
 
 	@Override
 	public String getOrderLeftTime(String title) {
-		return articleDAO.getOrderLeftTime(title);
+		return orderDAO.getOrderLeftTime(title);
 	}
 
 	@Override
 	public List<Order> getAllOrders(){
-		return articleDAO.getAllOrders();
+		return orderDAO.getAllOrders();
 	}
 
 	@Override
 	public List<Order> getUnfinishedOrders() {
-		return articleDAO.getUnfinishedOrders();
+		return orderDAO.getUnfinishedOrders();
 	}
 
 	@Override
 	public List<Order> getOrdersByDepartament(String departament) {
-		return articleDAO.getOrdersByDepartament(departament);
+		return orderDAO.getOrdersByDepartament(departament);
 	}
 
 	@Override
 	public List<Order> getOrdersByMaster(String master) {
-		return articleDAO.getOrdersByMaster(master);
+		return orderDAO.getOrdersByMaster(master);
 	}
 
 	@Override
 	public synchronized boolean addOrder(Order order){
-       if (articleDAO.orderExists(order.getTitle())) {
+       if (orderDAO.orderExists(order.getTitle())) {
     	   return false;
        } else {
-    	   articleDAO.addOrder(order);
+    	   orderDAO.addOrder(order);
     	   return true;
        }
 	}
 	@Override
 	public void updateOrder(Order order) {
-		articleDAO.updateOrder(order);
+
+		orderDAO.updateOrder(order);
 	}
 	@Override
 	public void deleteOrder(String title) {
-		articleDAO.deleteOrder(title);
+
+		orderDAO.deleteOrder(title);
 	}
 }
